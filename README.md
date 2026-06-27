@@ -1,7 +1,7 @@
 ![preferences](serpent-app/public/serpent-logo-landscape.png)<br>
 Senior project for the Winter 2025 semester at Northern Michigan University.
 
-![serpent-dashboard](/serpent/assets/dashboard.png)
+![serpent-dashboard](/assets/dashboard.png)
 
 ## Overview
 Serpent allows you to track your coding sessions similar to the popular app [Strava](https://www.strava.com/about).
