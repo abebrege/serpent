@@ -1,6 +1,8 @@
 ![preferences](serpent-app/public/serpent-logo-landscape.png)<br>
 Serpent is an app that [I am](http://abrege11.GitHub.io) creating for my senior project at Northern Michigan University for the Winter 2025 semester.
 
+![serpent-dashboard](/serpent/assets/dashboard.png)
+
 ## Overview
 Serpent allows you to track your coding sessions similar to the popular app [Strava](https://www.strava.com/about).
 
