@@ -376,10 +376,10 @@ export async function getUserActivityTotals(userId) {
     ] = results.map(([rows]) => rows);
 
     return {
-      repoCount: repoRow.repoCount,
-      commitCount: commitRow.commitCount,
-      submissionCount: submissionRow.submissionCount,
-      solutionCount: solutionRow.solutionCount,
+      repoCount: repoRow?.repoCount ?? 0,
+      commitCount: commitRow?.commitCount ?? 0,
+      submissionCount: submissionRow?.submissionCount ?? 0,
+      solutionCount: solutionRow?.solutionCount ?? 0,
     };
   } catch (error) {
     console.error('Error fetching user activity totals:', error.message);

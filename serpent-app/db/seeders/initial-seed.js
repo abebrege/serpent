@@ -1,55 +1,60 @@
-import { create_connection } from '../utils/connection';
-const { v4: uuidv4 } = require('uuid');
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-
+const dbConfig = {
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    port: process.env.DATABASE_PORT,
+};
+const schemaName = process.env.SCHEMA_NAME;
 
 async function seedDatabase() {
-    const connection = await create_connection();
+    const connection = await mysql.createConnection(dbConfig);
+    await connection.changeUser({ database: schemaName });
 
     try {
         console.log('\nseeding users...');
         await connection.query(`
             INSERT INTO users (user_id, email, first_name, last_name, username, password, github_username, leetcode_username, created_at)
-            VALUES ('${proccess.env.USER_ID}', 'abeabebrege@gmail.com', 'Abe', 'Brege', 'imabe', '$argon2id$v=19$m=65536,t=3,p=4$2qwLF/YTnjP/ktjuVPFIEA$hDNg+X+OhFc3R3t8HFHpVukTrLfCj/DfqwCbTDj6M44', 'abrege11', 'abrege11', NOW());
+            VALUES ('${process.env.USER_ID}', 'abeabebrege@gmail.com', 'Abe', 'Brege', 'imabe', '$argon2id$v=19$m=65536,t=3,p=4$2qwLF/YTnjP/ktjuVPFIEA$hDNg+X+OhFc3R3t8HFHpVukTrLfCj/DfqwCbTDj6M44', 'abrege11', 'abrege11', NOW());
         `);
 
         console.log('seeding sessions...');
         await connection.query(`
             INSERT INTO sessions (session_id, user_id, start, end, created_at) VALUES
-            ('51a9649c-de75-42e1-9daa-02ce53a2bbd4', '${proccess.env.USER_ID}', '2025-02-01 12:00:00', '2025-02-01 12:00:00', NOW()),
-            ('5ec02c29-1b9b-4f19-a2e2-327652fd0e45', '${proccess.env.USER_ID}', '2024-12-13 15:00:00', '2024-12-13 22:34:00', NOW()),
-            ('3aafdac1-863d-404e-9f29-d102faa6786b', '${proccess.env.USER_ID}', '2024-12-15 14:14:00', '2024-12-13 22:45:00', NOW()),
-            ('515b042b-14e4-4468-8ee4-c1aecb382183', '${proccess.env.USER_ID}', '2024-12-16 15:00:00', '2024-12-17 01:45:00', NOW()),
-            ('310a8148-1372-4262-8230-1101925b0402', '${proccess.env.USER_ID}', '2024-12-18 12:09:00', '2024-12-18 20:34:00', NOW()),
-            ('7e68fc10-d627-4dd1-b6b6-d6260cccdf7f', '${proccess.env.USER_ID}', '2024-12-19 19:27:00', '2024-12-19 22:12:00', NOW()),
-            ('e7e193d4-244d-475a-9bff-4bda036d6711', '${proccess.env.USER_ID}', '2024-12-20 15:38:00', '2024-12-20 18:45:00', NOW()),
-            ('e4ab7862-eea0-4cd3-8a7e-6c684faeb3bb', '${proccess.env.USER_ID}', '2024-12-21 12:38:00', '2024-12-21 22:30:00', NOW()),
-            ('92b52a19-0a21-43dc-8b5a-ebacdded943d', '${proccess.env.USER_ID}', '2024-12-22 11:15:00', '2024-12-22 17:18:00', NOW()),
-            ('c5534bfd-9d52-4314-b3da-9accedebd11f', '${proccess.env.USER_ID}', '2024-12-23 12:05:00', '2024-12-23 14:44:00', NOW()),
-            ('48f21b58-1176-4fdd-ae73-89ebb8b74c7c', '${proccess.env.USER_ID}', '2024-12-25 10:36:00', '2024-12-25 21:17:00', NOW()),
-            ('e36b16c3-8061-4779-9e4c-9b09b61b3696', '${proccess.env.USER_ID}', '2024-12-26 19:43:00', '2024-12-26 23:10:00', NOW()),
-            ('4332ebd7-737f-49d9-9e54-8aae460eb112', '${proccess.env.USER_ID}', '2024-12-27 13:40:00', '2024-12-27 22:00:00', NOW()),
-            ('fffdade5-a1e9-4d19-88c2-41a584854e02', '${proccess.env.USER_ID}', '2024-12-28 11:31:00', '2024-12-28 17:15:00', NOW()),
-            ('365cc9b5-293d-4026-82fa-3c3973eb53ad', '${proccess.env.USER_ID}', '2024-12-29 12:46:00', '2024-12-29 20:06:00', NOW()),
-            ('f54a3046-959e-49e6-8aac-f1d77efd113e', '${proccess.env.USER_ID}', '2025-01-01 14:05:00', '2025-01-01 17:29:00', NOW()),
-            ('4a6ea801-ed1a-40e8-bbc1-6200383cbdea', '${proccess.env.USER_ID}', '2025-01-03 12:10:00', '2025-01-03 20:30:00', NOW()),
-            ('aee87bbe-42e5-4d55-9f4f-9ef5a5d01687', '${proccess.env.USER_ID}', '2025-01-05 12:00:00', '2025-01-05 17:59:00', NOW()),
-            ('fa26b780-7e22-4624-a625-01238702753e', '${proccess.env.USER_ID}', '2025-01-06 11:00:00', '2025-01-07 00:30:00', NOW()),
-            ('fe00d621-2a05-498f-84ff-3ced17873a5c', '${proccess.env.USER_ID}', '2025-01-07 14:34:00', '2025-01-08 00:40:00', NOW()),
-            ('98dff8c9-91a4-468a-b2dc-a30a449c2ce1', '${proccess.env.USER_ID}', '2025-01-08 13:00:00', '2025-01-08 19:02:00', NOW()),
-            ('d2e51777-1830-4757-ab81-5d9918f2faa3', '${proccess.env.USER_ID}', '2025-01-09 13:14:00', '2025-01-09 17:31:00', NOW()),
-            ('a24d3768-cd61-4d97-bd91-8129aeec57e9', '${proccess.env.USER_ID}', '2025-01-10 15:17:00', '2025-01-10 23:40:00', NOW()),
-            ('255ccf52-c56b-420f-82e4-ecebf273378a', '${proccess.env.USER_ID}', '2025-01-11 11:00:00', '2025-01-11 20:00:00', NOW()),
-            ('6ee0a490-bd17-46f5-bdb0-95cae6229b8d', '${proccess.env.USER_ID}', '2025-01-13 09:56:00', '2025-01-13 12:38:00', NOW()),
-            ('16bb9b4b-e609-460e-8656-8806bb94fe10', '${proccess.env.USER_ID}', '2025-01-14 12:00:00', '2025-01-14 21:00:00', NOW()),
-            ('af026c2a-e6cb-4eb1-927d-6f8e3c91f783', '${proccess.env.USER_ID}', '2025-01-17 15:05:00', '2025-01-18 00:02:00', NOW()),
-            ('61be7d1b-5ac1-4fdb-91bb-527a41d9fe14', '${proccess.env.USER_ID}', '2025-01-18 12:34:00', '2025-01-18 19:30:00', NOW()),
-            ('85b696b9-4162-4eb1-b7d6-939003eb33a4', '${proccess.env.USER_ID}', '2025-01-19 12:55:00', '2025-01-19 15:55:00', NOW()),
-            ('c334ca4c-95b0-4c14-a44a-ea1d07644f37', '${proccess.env.USER_ID}', '2025-01-20 13:00:00', '2025-01-20 20:03:00', NOW()),
-            ('8cfaa40f-ffb1-402d-9db7-13fe704c4747', '${proccess.env.USER_ID}', '2025-01-21 11:00:00', '2025-01-21 19:25:00', NOW()),
-            ('ef286a91-f11c-4557-8a20-24cd9814ce93', '${proccess.env.USER_ID}', '2025-01-22 09:58:00', '2025-01-22 17:50:00', NOW());
+            ('51a9649c-de75-42e1-9daa-02ce53a2bbd4', '${process.env.USER_ID}', '2025-02-01 12:00:00', '2025-02-01 12:00:00', NOW()),
+            ('5ec02c29-1b9b-4f19-a2e2-327652fd0e45', '${process.env.USER_ID}', '2024-12-13 15:00:00', '2024-12-13 22:34:00', NOW()),
+            ('3aafdac1-863d-404e-9f29-d102faa6786b', '${process.env.USER_ID}', '2024-12-15 14:14:00', '2024-12-13 22:45:00', NOW()),
+            ('515b042b-14e4-4468-8ee4-c1aecb382183', '${process.env.USER_ID}', '2024-12-16 15:00:00', '2024-12-17 01:45:00', NOW()),
+            ('310a8148-1372-4262-8230-1101925b0402', '${process.env.USER_ID}', '2024-12-18 12:09:00', '2024-12-18 20:34:00', NOW()),
+            ('7e68fc10-d627-4dd1-b6b6-d6260cccdf7f', '${process.env.USER_ID}', '2024-12-19 19:27:00', '2024-12-19 22:12:00', NOW()),
+            ('e7e193d4-244d-475a-9bff-4bda036d6711', '${process.env.USER_ID}', '2024-12-20 15:38:00', '2024-12-20 18:45:00', NOW()),
+            ('e4ab7862-eea0-4cd3-8a7e-6c684faeb3bb', '${process.env.USER_ID}', '2024-12-21 12:38:00', '2024-12-21 22:30:00', NOW()),
+            ('92b52a19-0a21-43dc-8b5a-ebacdded943d', '${process.env.USER_ID}', '2024-12-22 11:15:00', '2024-12-22 17:18:00', NOW()),
+            ('c5534bfd-9d52-4314-b3da-9accedebd11f', '${process.env.USER_ID}', '2024-12-23 12:05:00', '2024-12-23 14:44:00', NOW()),
+            ('48f21b58-1176-4fdd-ae73-89ebb8b74c7c', '${process.env.USER_ID}', '2024-12-25 10:36:00', '2024-12-25 21:17:00', NOW()),
+            ('e36b16c3-8061-4779-9e4c-9b09b61b3696', '${process.env.USER_ID}', '2024-12-26 19:43:00', '2024-12-26 23:10:00', NOW()),
+            ('4332ebd7-737f-49d9-9e54-8aae460eb112', '${process.env.USER_ID}', '2024-12-27 13:40:00', '2024-12-27 22:00:00', NOW()),
+            ('fffdade5-a1e9-4d19-88c2-41a584854e02', '${process.env.USER_ID}', '2024-12-28 11:31:00', '2024-12-28 17:15:00', NOW()),
+            ('365cc9b5-293d-4026-82fa-3c3973eb53ad', '${process.env.USER_ID}', '2024-12-29 12:46:00', '2024-12-29 20:06:00', NOW()),
+            ('f54a3046-959e-49e6-8aac-f1d77efd113e', '${process.env.USER_ID}', '2025-01-01 14:05:00', '2025-01-01 17:29:00', NOW()),
+            ('4a6ea801-ed1a-40e8-bbc1-6200383cbdea', '${process.env.USER_ID}', '2025-01-03 12:10:00', '2025-01-03 20:30:00', NOW()),
+            ('aee87bbe-42e5-4d55-9f4f-9ef5a5d01687', '${process.env.USER_ID}', '2025-01-05 12:00:00', '2025-01-05 17:59:00', NOW()),
+            ('fa26b780-7e22-4624-a625-01238702753e', '${process.env.USER_ID}', '2025-01-06 11:00:00', '2025-01-07 00:30:00', NOW()),
+            ('fe00d621-2a05-498f-84ff-3ced17873a5c', '${process.env.USER_ID}', '2025-01-07 14:34:00', '2025-01-08 00:40:00', NOW()),
+            ('98dff8c9-91a4-468a-b2dc-a30a449c2ce1', '${process.env.USER_ID}', '2025-01-08 13:00:00', '2025-01-08 19:02:00', NOW()),
+            ('d2e51777-1830-4757-ab81-5d9918f2faa3', '${process.env.USER_ID}', '2025-01-09 13:14:00', '2025-01-09 17:31:00', NOW()),
+            ('a24d3768-cd61-4d97-bd91-8129aeec57e9', '${process.env.USER_ID}', '2025-01-10 15:17:00', '2025-01-10 23:40:00', NOW()),
+            ('255ccf52-c56b-420f-82e4-ecebf273378a', '${process.env.USER_ID}', '2025-01-11 11:00:00', '2025-01-11 20:00:00', NOW()),
+            ('6ee0a490-bd17-46f5-bdb0-95cae6229b8d', '${process.env.USER_ID}', '2025-01-13 09:56:00', '2025-01-13 12:38:00', NOW()),
+            ('16bb9b4b-e609-460e-8656-8806bb94fe10', '${process.env.USER_ID}', '2025-01-14 12:00:00', '2025-01-14 21:00:00', NOW()),
+            ('af026c2a-e6cb-4eb1-927d-6f8e3c91f783', '${process.env.USER_ID}', '2025-01-17 15:05:00', '2025-01-18 00:02:00', NOW()),
+            ('61be7d1b-5ac1-4fdb-91bb-527a41d9fe14', '${process.env.USER_ID}', '2025-01-18 12:34:00', '2025-01-18 19:30:00', NOW()),
+            ('85b696b9-4162-4eb1-b7d6-939003eb33a4', '${process.env.USER_ID}', '2025-01-19 12:55:00', '2025-01-19 15:55:00', NOW()),
+            ('c334ca4c-95b0-4c14-a44a-ea1d07644f37', '${process.env.USER_ID}', '2025-01-20 13:00:00', '2025-01-20 20:03:00', NOW()),
+            ('8cfaa40f-ffb1-402d-9db7-13fe704c4747', '${process.env.USER_ID}', '2025-01-21 11:00:00', '2025-01-21 19:25:00', NOW()),
+            ('ef286a91-f11c-4557-8a20-24cd9814ce93', '${process.env.USER_ID}', '2025-01-22 09:58:00', '2025-01-22 17:50:00', NOW());
         `);
 
         console.log('seeding intervals...');
